@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+      i {
+        margin: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Atracción</h1>
+    <table border="1px">
+        <i class="pasajero" id="p0">0   </i>
+        <i class="pasajero" id="p1">0   </i>
+        <i class="pasajero" id="p2">0   </i>
+        <i class="pasajero" id="p3">0   </i>
+        <i class="pasajero" id="p4">0   </i>
+        <i class="pasajero" id="p5">0   </i>
+        <br>
+
+    <input type="button" id="girar" value="Girar" onclick="girar()">
+    <input type="button" id="parar" value="Parar" onclick="parar()" disabled ><br>
+    <input type="button"  value="Entra normal" onclick="nuevoNormal()">
+    <input type="button"  value="Entra Vip" onclick="nuevoVip()"><br>
+
+    <p>Cola normal: <span id="colaNormal"></span></p>
+    <p>Cola VIP: <span id="colaVip"></span></p>
+
+    <script type="text/javascript">
+      var totales =0;
+      var girando = false;
+      var atraccion = [];
+      var colaNormal = [];
+      var colaVip = [];
+      function girar(){
+        girando = true;
+        $(".pasajero").addClass( "fa fa-spin" )
+
+        document.getElementById("parar").disabled=false;
+        document.getElementById("girar").disabled=true;
+
+
+      }
+      function parar(){
+        girando = false;
+        atraccion = [];
+        $(".pasajero").removeClass( "fa fa-spin" )
+
+
+        var aux = colaVip.length;
+        for(var i=0;i<aux && i<6;i++){
+          atraccion.push(colaVip.shift());
+        }
+        var libres= 6 -atraccion.length;
+        aux = colaNormal.length
+        for(var i = 0; i<aux && i<libres;i++ ){
+          atraccion.push(colaNormal.shift());
+        }
+        dibujar();
+
+        document.getElementById("girar").disabled=false;
+        document.getElementById("parar").disabled=true;
+
+      }
+      function nuevoNormal(){
+        totales++;
+        if(atraccion.length< 6 && !girando){
+          atraccion.push(totales);
+        }else{
+          colaNormal.push(totales);
+        }
+
+
+        dibujar();
+      }
+      function nuevoVip(){
+        totales++;
+        if(atraccion.length <6 && !girando){
+          atraccion.push(totales);
+        }else{
+          colaVip.push(totales);
+        }
+        dibujar();
+      }
+      function dibujar(){
+        document.getElementById("colaNormal"). innerHTML = colaNormal;
+        document.getElementById("colaVip"). innerHTML = colaVip;
+        for(var i=0;i<6;i++){
+          var str = "p"+i;
+          document.getElementById(str).innerHTML = "0";
+        }
+        console.log(atraccion.length)
+        for(var i=0;i<atraccion.length;i++){
+          var str = "p"+i;
+          document.getElementById(str).innerHTML = atraccion[i];
+
+        }
+
+
+
+      }
+    </script>
+  </body>
+</html>
